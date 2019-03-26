@@ -25,7 +25,7 @@ namespace mx{
     template <typename T>
     class Matrix{
     public:
-        Matrix() : Matrix( {1,1}, {0} ){}
+        Matrix() = delete;
     
         Matrix(Dimensions d)
         : dim(d) {
