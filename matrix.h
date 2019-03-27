@@ -25,18 +25,38 @@ bool operator==(const Dimensions &a, const Dimensions &b) {
 template <typename T>
 class Matrix {
   public:
+  
+  /**
+  * To create a matrix, we need to know its size
+  * Therefore the default constructor is disabled
+  **/
     Matrix() = delete;
 
+  /**
+  * Constructs a matrix of given size 
+  * and sets its elements to default value of their type
+  **/
     Matrix(Dimensions d) : dim(d) {
         elements.resize(dim.rows * dim.collumns, T());
     }
-
+    
+  /**
+  * Constructs a matrix of given size 
+  * and sets its elements to values in initializer list.
+  * (Starting from first row)
+  * Throws an exception if the number of elements in the list
+  * Is not equal to number of elements in the matrix.
+  **/
     Matrix(Dimensions d, std::initializer_list<T> l) : dim(d), elements(l) {
         if ((dim.rows * dim.collumns) != l.size())
             throw std::invalid_argument("Matrix: Make sure that row_count * "
                                         "collumn_count = list.lenght()");
     }
-
+    
+  /**
+  * Constructs a matrix with one row and fills it with 
+  * values from list l
+  **/
     Matrix(std::initializer_list<T> l) : elements(l) {
         dim.rows = 1;
         dim.collumns = l.size();
@@ -50,6 +70,10 @@ class Matrix {
 
     bool isSquare() const { return (dim.collumns == dim.rows); }
 
+ /** 
+ * Returns reference to an element ofbthe matrix.
+ * Indexes start at 1
+ **/
     T &at(uint32_t row, uint32_t collumn) {
         if (row > dim.rows || collumn > dim.collumns || row < 1 ||
             collumn < 1) {
@@ -109,6 +133,11 @@ class Matrix {
         }
         return minor;
     }
+    
+    /**
+    * Calculates the determinant recursively using
+    * Laplace expansion
+    **/
 
     T det() {
         if (!isSquare())
@@ -128,7 +157,11 @@ class Matrix {
 
         return sum;
     }
-
+    
+    /** Returns a new matrix that 
+    * is a transposed parent matrix
+    **/
+    
     Matrix transpose() {
         Matrix transposed{dim};
 
@@ -140,7 +173,10 @@ class Matrix {
 
         return transposed;
     }
-
+    
+    /** Returns a new matrix that 
+    * is an inverted parent matrix
+    **/
     Matrix invert() {
         if (!isSquare())
             throw std::invalid_argument("Matrix must be square to be inverted");
@@ -171,6 +207,8 @@ class Matrix {
     Dimensions dim;
     std::vector<T> elements;
 };
+
+//Arithmetic operators overloads
 
 template <typename T>
 Matrix<T> operator+(Matrix<T> &a, Matrix<T> &b) {
