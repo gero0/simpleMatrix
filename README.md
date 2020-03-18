@@ -1,2 +1,2 @@
 # simpleMatrix
-A simple implementation of matrices in C++
+A simple implementation of matrices in C++.
